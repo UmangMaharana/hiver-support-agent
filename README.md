@@ -279,6 +279,23 @@ Additional flags:
 
 The high judge scores should not be interpreted as proof of autonomous resolution. A substantial portion of high-quality outputs are high-quality because the system appropriately defers to a human.
 
+### Human audit of the LLM judge
+
+To test whether the LLM judge tracks human judgment, a blinded audit was run on **30 generated replies**, with at least two examples per intent plus four additional sampled cases. The human evaluator saw only the customer message and generated reply, not the judge scores, predicted intent, or model escalation decision. The human used the same six 1–5 dimensions as the LLM judge.
+
+| Dimension | Human mean | LLM-judge mean | MAE | Exact agreement | Within ±1 |
+|---|---:|---:|---:|---:|---:|
+| Intent alignment | 4.00 | 5.00 | 1.00 | 43.3% | 70.0% |
+| Helpfulness | 3.57 | 4.97 | 1.40 | 16.7% | 53.3% |
+| Grounding | 3.87 | 5.00 | 1.13 | 26.7% | 63.3% |
+| Safety / factuality | 3.57 | 5.00 | 1.43 | 26.7% | 60.0% |
+| Escalation appropriateness | 3.93 | 5.00 | 1.07 | 33.3% | 66.7% |
+| **Overall quality** | **4.10** | **5.00** | **0.90** | **26.7%** | **83.3%** |
+
+The key calibration finding is that the judge was **systematically more generous** on this sample: it assigned an overall quality of 5 to all 30 replies, while the human scores ranged from 3 to 5. Overall exact agreement was only **26.7% (8/30)**, although **83.3% (25/30)** were within one point. Because the judge's overall scores were constant at 5, rank correlation is not meaningful for that dimension.
+
+This means the 4.868/5 automated quality score should be treated as a **useful but poorly calibrated automated signal**, not as a direct estimate of human-perceived quality. The next iteration should use a more independent judge and a larger, doubly annotated sample.
+
 There is also a methodological limitation: generation and judging use the same default Gemini model family, so this is not independent external grading.
 
 ---
@@ -615,7 +632,9 @@ python -m src.evaluation.build_evidence_table
 └── tests/
 ```
 
-Generated data and secrets are excluded from Git.
+Generated raw/derived data and secrets are excluded from Git by default. **Required small evaluation artifacts are explicitly allow-listed**: the 250-row golden set and the 30-row human-vs-LLM judge audit should be committed with the submission.
+
+The concise submission report is [`REPORT.md`](REPORT.md). The human-vs-LLM audit artifact is `data/evaluation/reply_human_vs_llm_30_complete.csv`.
 
 ---
 
@@ -652,6 +671,7 @@ The most important limitations are:
 5. **Judge retrieval differs from production retrieval.** The judge re-derives retrieval context using a different TF-IDF configuration rather than always receiving the exact evidence shown to the generator.
 6. **Historical resolutions can become stale.** Prompt constraints reduce this risk but cannot guarantee factual correctness; the 1.6% unsupported-claim rate demonstrates that the safeguard is not perfect.
 7. **No live Tesco systems are connected.** The agent cannot actually inspect an account, current store inventory, current promotions, orders, or internal support systems.
+8. **Human-vs-judge reply-quality audit is small (n=30) and single-annotator.** It is useful calibration evidence, but not a statistically strong estimate of judge reliability; the judge was systematically more generous on this sample.
 
 ---
 
@@ -687,6 +707,7 @@ That would make escalation and retrieval claims much more defensible.
 | Reply coverage | 100% |
 | Valid escalation JSON | 100% |
 | LLM-judge overall quality | 4.868 / 5 |
+| LLM-judge vs human overall: exact agreement / within ±1 | 26.7% / 83.3% (n=30) |
 | Unsupported claims | 1.6% |
 
 The headline is not “the agent solves customer support.”
