@@ -176,6 +176,14 @@ The human annotation was not blinded to model outputs, so these results are dire
 
 ### 3.4 Generation reliability
 
+**Evaluation-artifact caveat:** `GOLD_001–GOLD_065` were generated under an earlier
+prompt revision; `GOLD_066–GOLD_250` used the improved prompt now in
+`src/generation/build_prompt.py`. The frozen 250-row result therefore measures a
+mixed prompt-version artifact. A clean rerun of all 250 examples under one final
+prompt would be the preferred next validation step.
+
+### 3.4 Generation reliability
+
 | Metric | Result |
 |---|---:|
 | Reply coverage | **100% (250/250)** |
@@ -334,7 +342,10 @@ Other false positives included casual social commentary, general availability su
 3. **Generation and LLM judge use the same default Gemini model family.** This makes the judge a self-evaluation rather than an independent evaluator.
 4. **The judge re-derived retrieval context rather than consuming exactly the generator's stored top-3 evidence.** Its grounding score is therefore not a strict replay of the generation-time evidence.
 5. **Historical resolutions are not current policy.** Prompt safeguards reduce the risk but do not eliminate it; GOLD_060 demonstrates the remaining failure mode.
-6. **Human-vs-judge reply-quality audit is small (n=30) and single-annotator.** The audit provides useful calibration evidence, but it is not a statistically strong estimate of judge reliability. On this sample the judge was systematically more generous, including an overall score of 5 on all 30 replies.
+6. **Human-vs-judge reply-quality audit is small (n=30) and single-annotator.**
+The human could not directly inspect the hidden model escalation flag, so the
+escalation-appropriateness comparison is response-level rather than a direct
+boolean-decision audit. The audit provides useful calibration evidence, but it is not a statistically strong estimate of judge reliability. On this sample the judge was systematically more generous, including an overall score of 5 on all 30 replies.
 
 ### Decision log
 

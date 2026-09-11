@@ -54,6 +54,36 @@ Clean conversation cases
 The system is designed to **draft safely**, not pretend to have live Tesco systems. Historical replies are treated as **historical resolution guidance**, not as proof of current Tesco policy, pricing, availability, or account state.
 
 ---
+## 1A. Fast headline-result reproduction
+
+A reviewer can reproduce the reported evaluation metrics without rebuilding the
+~3M-row raw Twitter dataset or making new Gemini calls.
+
+The repository should contain these small evaluation artifacts:
+
+- `data/golden/tesco_golden_250_labeled.csv`
+- `data/baselines/baseline_predictions.csv`
+- `data/generation/reply_predictions.csv`
+- `data/retrieval/retrieval_human_eval_150.csv`
+- `data/escalation/escalation_human_eval_50.csv`
+- `data/evaluation/reply_judgments.csv`
+
+Then, after installing the project:
+
+```bash
+python -m pip install -e .
+python -m src.evaluation.run_full_eval
+```
+
+This recomputes the headline intent, retrieval, escalation, generation-coverage,
+and LLM-judge aggregates from the frozen evaluation artifacts. It is the
+recommended **under-15-minute headline reproduction path**.
+
+The full data rebuild (`build_graph` through generation/judging) is intentionally
+separate: it requires the raw Kaggle dataset and Gemini API access and is not
+claimed to fit the 15-minute reproduction target.
+
+---
 
 ## 2. Dataset and scope
 
@@ -276,6 +306,12 @@ Additional flags:
 
 - Unsupported-claim rate: **1.6%**
 - Judge "needs human" rate: **76.4%**
+
+The 250 generated replies are a frozen evaluation artifact. **GOLD_001–GOLD_065
+were generated under an earlier prompt revision; GOLD_066 onward used the improved
+prompt shown in `src/generation/build_prompt.py`.** Therefore the 4.868/5 judge
+result is a result for the frozen mixed-version artifact, not a clean measurement
+of the final prompt alone.
 
 The high judge scores should not be interpreted as proof of autonomous resolution. A substantial portion of high-quality outputs are high-quality because the system appropriately defers to a human.
 
