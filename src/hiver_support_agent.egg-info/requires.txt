@@ -1,0 +1,12 @@
+pandas<3,>=2.2
+numpy<3,>=1.26
+scikit-learn<2,>=1.5
+pyarrow<23,>=17
+tqdm<5,>=4.66
+python-dotenv<2,>=1.0
+pydantic<3,>=2.8
+kagglehub<1,>=0.3
+
+[dev]
+pytest<9,>=8
+ruff<1,>=0.6
