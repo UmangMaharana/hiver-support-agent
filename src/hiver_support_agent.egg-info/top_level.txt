@@ -1,6 +1,0 @@
-classification
-escalation
-generation
-ingestion
-retrieval
-taxonomy

@@ -9,3 +9,9 @@ venv/
 
 # Data
 data/
+# Environment / secrets
+.env
+
+
+# Generated packaging metadata
+*.egg-info/
