@@ -1,7 +1,11 @@
-.venv/
+# Python
 __pycache__/
-*.pyc
-.env
+*.py[cod]
+*.pyo
 
-data/raw/*
-data/processed/*
+# Virtual environments
+.venv/
+venv/
+
+# Data
+data/
