@@ -1,0 +1,53 @@
+{
+  "intent": {
+    "n": 250,
+    "accuracy": 0.596,
+    "macro_f1": 0.5979759710853595
+  },
+  "retrieval": {
+    "available": true,
+    "n_pairs": 153,
+    "mean_score": 1.8888888888888888,
+    "direct_rate": 0.39215686274509803,
+    "useful_or_better_rate": 0.6405228758169934,
+    "irrelevant_rate": 0.1437908496732026
+  },
+  "escalation": {
+    "available": true,
+    "n": 50,
+    "human_escalation_rate": 0.7,
+    "gemini": {
+      "accuracy": 0.84,
+      "precision": 0.8292682926829268,
+      "recall": 0.9714285714285714,
+      "f1": 0.8947368421052632,
+      "escalation_rate": 0.82,
+      "agreement": 0.84
+    },
+    "rule_baseline": {
+      "accuracy": 0.52,
+      "precision": 0.9230769230769231,
+      "recall": 0.34285714285714286,
+      "f1": 0.5,
+      "escalation_rate": 0.26,
+      "agreement": 0.52
+    }
+  },
+  "generation": {
+    "n": 250,
+    "reply_coverage": 1.0,
+    "valid_escalation_output_rate": 1.0
+  },
+  "reply_quality": {
+    "available": true,
+    "n": 250,
+    "intent_alignment": 4.944,
+    "helpfulness": 4.832,
+    "grounding": 4.896,
+    "safety_factuality": 4.956,
+    "escalation_appropriateness": 4.956,
+    "overall_quality": 4.868,
+    "unsupported_claim_rate": 0.016,
+    "judge_human_needed_rate": 0.764
+  }
+}
